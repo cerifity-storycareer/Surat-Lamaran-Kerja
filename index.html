@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceritify — Surat Lamaran Kerja </title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="judul-proyek">
+    <a href="#">📄 Ceritify — Buat CV-mu Sendiri</a>
+  </div>
+
+  <div class="container">
+    <!-- FORM BAGIAN KIRI -->
+    <div class="form-section">
+      <h2>📝 Lengkapi Data CV</h2>
+      
+      <label>Nama Lengkap</label>
+      <input type="text" id="nama" placeholder="Contoh: Ni Putu Aulia Pratiwi" oninput="updateCV()">
+      
+      <label>Jabatan / Tujuan</label>
+      <input type="text" id="jabatan" placeholder="Contoh: Mahasiswa / Lulusan Baru" oninput="updateCV()">
+      
+      <label>Email</label>
+      <input type="email" id="email" placeholder="email@kamu.com" oninput="updateCV()">
+      
+      <label>Nomor HP</label>
+      <input type="tel" id="telp" placeholder="08xx-xxxx-xxxx" oninput="updateCV()">
+      
+      <label>Alamat Lengkap</label>
+      <input type="text" id="alamat" placeholder="Desa/Kecamatan, Kabupaten" oninput="updateCV()">
+      
+      <label>Unggah Foto Formal</label>
+      <input type="file" id="unggah-foto" accept="image/*" onchange="tampilkanFoto()">
+      
+      <label>Profil Singkat</label>
+      <textarea id="profil" rows="3" placeholder="Ceritakan sedikit tentang dirimu..." oninput="ubahFormatOtomatis('profil', 'cv-profil', true)"></textarea>
+      
+      <label>Pendidikan</label>
+      <textarea id="pendidikan" rows="3" placeholder="Nama Sekolah/Kampus – Jurusan – Tahun Lulus" oninput="ubahFormatOtomatis('pendidikan', 'cv-pendidikan', true)"></textarea>
+      
+      <label>Pengalaman Kerja / Magang</label>
+      <textarea id="pengalaman" rows="3" placeholder="Posisi – Instansi – Tanggal & Tugas" oninput="ubahFormatOtomatis('pengalaman', 'cv-pengalaman', true)"></textarea>
+      
+      <label>Keahlian</label>
+      <textarea id="keahlian" rows="2" placeholder="Kemampuan yang kamu miliki" oninput="ubahFormatOtomatis('keahlian', 'cv-keahlian', true)"></textarea>
+      
+      <label>Sertifikat & Pelatihan</label>
+      <textarea id="sertifikat" rows="2" placeholder="Nama Sertifikat – Penyelenggara – Tahun" oninput="ubahFormatOtomatis('sertifikat', 'cv-sertifikat', true)"></textarea>
+      
+      <label>Organisasi & Kegiatan</label>
+      <textarea id="organisasi" rows="2" placeholder="Jabatan – Organisasi – Tahun" oninput="ubahFormatOtomatis('organisasi', 'cv-organisasi', true)"></textarea>
+      
+      <!-- PILIH WARNA -->
+      <div class="grup-warna">
+        <div class="bagian-warna">
+          <h3>🎨 Warna Aksen</h3>
+          <div class="warna-pilihan">
+            <button class="warna aktif" data-warna="#1e293b" style="background:#1e293b" onclick="gantiWarna(this)"></button>
+            <button class="warna" data-warna="#2563eb" style="background:#2563eb" onclick="gantiWarna(this)"></button>
+            <button class="warna" data-warna="#16a34a" style="background:#16a34a" onclick="gantiWarna(this)"></button>
+            <button class="warna" data-warna="#dc2626" style="background:#dc2626" onclick="gantiWarna(this)"></button>
+            <button class="warna" data-warna="#f59e0b" style="background:#f59e0b" onclick="gantiWarna(this)"></button>
+            <button class="warna" data-warna="#ec4899" style="background:#ec4899" onclick="gantiWarna(this)"></button>
+          </div>
+        </div>
+        <div class="bagian-warna">
+          <h3>📄 Warna Latar</h3>
+          <div class="warna-latar">
+            <button class="warna aktif" data-latar="#ffffff" style="background:#ffffff; border:1px solid #ddd" onclick="gantiLatar(this)"></button>
+            <button class="warna" data-latar="#f0f9ff" style="background:#f0f9ff; border:1px solid #ddd" onclick="gantiLatar(this)"></button>
+            <button class="warna" data-latar="#fef7f1" style="background:#fef7f1; border:1px solid #ddd" onclick="gantiLatar(this)"></button>
+            <button class="warna" data-latar="#fdf2f8" style="background:#fdf2f8; border:1px solid #ddd" onclick="gantiLatar(this)"></button>
+            <button class="warna" data-latar="#f0fdf4" style="background:#f0fdf4; border:1px solid #ddd" onclick="gantiLatar(this)"></button>
+            <button class="warna" data-latar="#f5f5f4" style="background:#f5f5f4; border:1px solid #ddd" onclick="gantiLatar(this)"></button>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn-unduh" onclick="unduhPDF()">📄 Unduh CV ke PDF</button>
+    </div>
+    
+    <!-- PRATINJAU CV KANAN -->
+    <div class="cv-section">
+      <h2>👁️ Pratinjau CV</h2>
+      <div class="cv-preview" id="cv-preview">
+        <div class="cv-header">
+          <div class="foto-profil" id="foto-profil">
+            <img id="tampil-foto" src="" alt="Foto Profil" style="display:none;">
+            <span id="initial">SA</span>
+          </div>
+          <div class="cv-nama">
+            <h1 id="cv-nama">Nama Lengkap</h1>
+            <p id="cv-jabatan">Jabatan / Tujuan</p>
+          </div>
+        </div>
+        <div class="garis" id="garis-pemisah"></div>
+        <div class="cv-konten">
+          <p class="kontak">
+            <span>📧 <span id="cv-email">email@kamu.com</span></span>
+            <span>📱 <span id="cv-telp">08xx-xxxx-xxxx</span></span>
+            <span>📍 <span id="cv-alamat">Alamat Lengkap</span></span>
+          </p>
+          
+          <h3>PROFIL</h3>
+          <p id="cv-profil"><em>Belum diisi...</em></p>
+          
+          <h3>PENDIDIKAN</h3>
+          <p id="cv-pendidikan"><em>Belum diisi...</em></p>
+          
+          <h3>PENGALAMAN KERJA</h3>
+          <p id="cv-pengalaman"><em>Belum diisi...</em></p>
+          
+          <h3>KEAHLIAN</h3>
+          <p id="cv-keahlian"><em>Belum diisi...</em></p>
+          
+          <h3>SERTIFIKAT & PELATIHAN</h3>
+          <p id="cv-sertifikat"><em>Belum diisi...</em></p>
+          
+          <h3>ORGANISASI & KEGIATAN</h3>
+          <p id="cv-organisasi"><em>Belum diisi...</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
